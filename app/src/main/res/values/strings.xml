@@ -4,5 +4,8 @@
     <string name="fyber_securitykey">6b88263f1af12fa8b0b78f0607f2675d</string>
     <string name="offer_wall_button">offer wall</string>
     <string name="virtual_currency_button">virtual currency</string>
+    <string name="interstitial_button">interstitial</string>
     <string name="userid_placeholder">This is the user id.</string>
+    <string name="video_button">video</string>
+    <string name="banner_button">Banner</string>
 </resources>

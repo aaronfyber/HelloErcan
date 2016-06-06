@@ -2,8 +2,6 @@ package com.newfivefour.fyberintegration.logging;
 
 import android.widget.TextView;
 
-import com.newfivefour.fyberintegration.logging.LoggingOutput;
-
 public class DebugTextView implements LoggingOutput {
 
     private TextView tv;
@@ -13,18 +11,27 @@ public class DebugTextView implements LoggingOutput {
     }
 
     @Override
-    public void debugOutput(String tag, String text) {
-        this.tv.append("D " + tag + " " + text + "\n");
+    public void debugOutput(String s) {
+        this.tv.append(s);
     }
 
     @Override
-    public void warningOutput(String tag, String text) {
-        this.tv.append("W " + tag + " " + text + "\n");
+    public void warningOutput(String s) {
+        this.tv.append(s);
     }
 
     @Override
-    public void errorOutput(String tag, String text) {
-        this.tv.append("E " + tag + " " + text + "\n");
+    public void errorOutput(String s) {
+        this.tv.append(s);
+    }
 
+    @Override
+    public void fillLog(String log) {
+        this.tv.setText(log);
+    }
+
+    @Override
+    public void clearLog() {
+        this.tv.setText("");
     }
 }

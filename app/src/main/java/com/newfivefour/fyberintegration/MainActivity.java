@@ -3,11 +3,13 @@ package com.newfivefour.fyberintegration;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ScrollView;
 
 import com.fyber.Fyber;
@@ -22,6 +24,7 @@ import com.fyber.requesters.InterstitialRequester;
 import com.fyber.requesters.OfferWallRequester;
 import com.fyber.requesters.RequestCallback;
 import com.fyber.requesters.RequestError;
+import com.fyber.requesters.RewardedVideoRequester;
 import com.fyber.requesters.VirtualCurrencyCallback;
 import com.fyber.requesters.VirtualCurrencyRequester;
 import com.newfivefour.fyberintegration.databinding.MainActivityBinding;
@@ -37,40 +40,67 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        MainActivityBinding main = DataBindingUtil.setContentView(this, R.layout.main_activity);
+        final MainActivityBinding main = DataBindingUtil.setContentView(this, R.layout.main_activity);
         this.debugView = main.debugScrollView;
+
         Logger.init(new DebugTextView(main.debugTextView));
+
         final Fyber.Settings settings = Fyber.with(getString(R.string.fyber_appid), this)
                 .withSecurityToken(getString(R.string.fyber_securitykey))
                 .start();
-        Logger.debugOutput(TAG, "Initialising Fyber SDK");
+        Logger.debugOutput(TAG, "Initialising SDK");
         Logger.debugOutput(TAG, "User ID is: " + settings.getUserId());
 
         main.button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Logger.debugOutput(TAG, "Offer wall clicked");
+                Logger.debugOutput(TAG, "Offer wall request");
                 OfferWallRequester.create(new WallRequest()).request(MainActivity.this);
+            }
+        });
+
+        main.bannerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Logger.debugOutput(TAG, "Creating and attaching BannerAdView to View");
+                createAndShowBanner(main.bannerPlacementRelativelayout);
             }
         });
 
         main.virtualCurrencyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Logger.debugOutput(TAG, "Virtual currency request pressed");
+                Logger.debugOutput(TAG, "Virtual currency request");
                 VirtualCurrencyRequester.create(new VirtualCurrencyRequest()).request(MainActivity.this);
             }
         });
 
-        BannerAdView bannerAdView = new BannerAdView(this)
+        main.interstitialButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                InterstitialRequester.create(new InterstitialRequestCallback()).request(MainActivity.this);
+                Logger.debugOutput(TAG, "Interstitial request made");
+            }
+        });
+
+        main.videoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Logger.debugOutput(TAG, "Video request made");
+                RewardedVideoRequester.create(new VideoCallback()).request(MainActivity.this);
+            }
+        });
+
+        Logger.debugOutput(TAG, "Creating and attaching BannerAdView to View");
+        createAndShowBanner(main.bannerPlacementRelativelayout);
+    }
+
+    private void createAndShowBanner(ViewGroup bannerPlacement) {
+        BannerAdView bannerAdView = new BannerAdView(MainActivity.this)
                 .withNetworkSize(AdMobNetworkBannerSizes.LARGE_BANNER)
                 .withListener(new BannerAdListener())
                 .loadOnAttach();
-        main.bannerPlacement.addView(bannerAdView);
-        Logger.debugOutput(TAG, "Attaching BannerAdView to View");
-
-        InterstitialRequester.create(new InterstitialRequestCallback()).request(this);
-        Logger.debugOutput(TAG, "Interstitial request made");
+        bannerPlacement.addView(bannerAdView);
     }
 
     @Override
@@ -83,9 +113,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(debugView.getVisibility()==View.VISIBLE) {
+            debugView.bringToFront();
             debugView.setVisibility(View.INVISIBLE);
+            ViewCompat.setTranslationZ(debugView, 10);
         } else {
+            debugView.bringToFront();
             debugView.setVisibility(View.VISIBLE);
+            ViewCompat.setTranslationZ(debugView, 10);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -116,7 +150,8 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onAdAvailable(Intent intent) {
-            Logger.debugOutput(TAG, "Interstitial error available");
+            Logger.debugOutput(TAG, "Interstitial available");
+            startActivityForResult(intent, 304);
         }
 
         @Override
@@ -165,6 +200,24 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onRequestError(RequestError requestError) {
             Logger.debugOutput(TAG, "Something went wrong with the request: " + requestError.getDescription());
+        }
+    }
+
+    private class VideoCallback implements RequestCallback {
+        @Override
+        public void onAdAvailable(Intent intent) {
+            Logger.debugOutput(TAG, "Video available");
+            startActivityForResult(intent, 305);
+        }
+
+        @Override
+        public void onAdNotAvailable(AdFormat adFormat) {
+            Logger.debugOutput(TAG, "No video available: " + adFormat);
+        }
+
+        @Override
+        public void onRequestError(RequestError requestError) {
+            Logger.debugOutput(TAG, "Video request error: " + requestError);
         }
     }
 }
