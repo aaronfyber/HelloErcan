@@ -1,90 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    >
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
     <data>
     </data>
-    <ScrollView
+    <android.support.v4.widget.DrawerLayout
+        android:id="@+id/drawer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
-    <RelativeLayout
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_centerHorizontal="true"
-        android:paddingBottom="@dimen/activity_vertical_margin"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
-        android:textAlignment="center"
-        tools:context=".MainActivity">
-        <RelativeLayout
-            android:id="@+id/banner_placement_relativelayout"
+        android:layout_height="match_parent">
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
+            android:layout_height="match_parent"
             >
-        </RelativeLayout>
-        <Button
-            android:id="@+id/button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/banner_placement_relativelayout"
-            android:layout_centerHorizontal="true"
-            android:text="@string/offer_wall_button"
-            android:textAllCaps="true" />
-        <Button
-            android:id="@+id/banner_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/button"
-            android:layout_centerHorizontal="true"
-            android:text="@string/banner_button"
-            android:textAllCaps="true" />
-        <Button
-            android:id="@+id/virtual_currency_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/banner_button"
-            android:layout_centerHorizontal="true"
-            android:text="@string/virtual_currency_button"
-            android:textAllCaps="true"
-            />
-        <Button
-            android:id="@+id/interstitial_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/virtual_currency_button"
-            android:layout_centerHorizontal="true"
-            android:text="@string/interstitial_button"
-            android:textAllCaps="true"
-            />
-        <Button
-            android:id="@+id/video_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/interstitial_button"
-            android:layout_centerHorizontal="true"
-            android:text="@string/video_button"
-            android:textAllCaps="true"
-            />
+            <RelativeLayout
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerHorizontal="true"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/activity_vertical_margin"
+                android:textAlignment="center"
+                tools:context=".MainActivity">
+                <RelativeLayout
+                    android:id="@+id/banner_placement_relativelayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    >
+                </RelativeLayout>
+                <Button
+                    android:id="@+id/button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/banner_placement_relativelayout"
+                    android:layout_centerHorizontal="true"
+                    android:text="@string/offer_wall_button"
+                    android:textAllCaps="true" />
+                <Button
+                    android:id="@+id/banner_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/button"
+                    android:layout_centerHorizontal="true"
+                    android:text="@string/banner_button"
+                    android:textAllCaps="true" />
+                <Button
+                    android:id="@+id/virtual_currency_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/banner_button"
+                    android:layout_centerHorizontal="true"
+                    android:text="@string/virtual_currency_button"
+                    android:textAllCaps="true"
+                    />
+                <Button
+                    android:id="@+id/interstitial_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/virtual_currency_button"
+                    android:layout_centerHorizontal="true"
+                    android:text="@string/interstitial_button"
+                    android:textAllCaps="true"
+                    />
+                <Button
+                    android:id="@+id/video_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/interstitial_button"
+                    android:layout_centerHorizontal="true"
+                    android:text="@string/video_button"
+                    android:textAllCaps="true"
+                    />
+            </RelativeLayout>
+        </ScrollView>
         <ScrollView
             android:id="@+id/debugScrollView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#000000"
-            android:visibility="invisible">
+            android:layout_gravity="end"
+            android:visibility="visible">
             <TextView
                 android:id="@+id/debugTextView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:textColor="@android:color/holo_green_dark"
-                android:textSize="10dp"
+                android:textSize="12dp"
                 tools:text="hi"
                 />
         </ScrollView>
-    </RelativeLayout>
-    </ScrollView>
+    </android.support.v4.widget.DrawerLayout>
 </layout>

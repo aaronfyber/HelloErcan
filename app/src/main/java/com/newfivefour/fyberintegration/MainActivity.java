@@ -2,15 +2,10 @@ package com.newfivefour.fyberintegration;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v4.view.ViewCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ScrollView;
 
 import com.fyber.Fyber;
 import com.fyber.ads.AdFormat;
@@ -35,21 +30,25 @@ import com.newfivefour.fyberintegration.logging.Logger;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
-    private ScrollView debugView;
+    private BannerAdView bannerAdView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         final MainActivityBinding main = DataBindingUtil.setContentView(this, R.layout.main_activity);
-        this.debugView = main.debugScrollView;
 
         Logger.init(new DebugTextView(main.debugTextView));
 
-        final Fyber.Settings settings = Fyber.with(getString(R.string.fyber_appid), this)
+        Fyber.Settings settings = Fyber.with(getString(R.string.fyber_appid), this)
                 .withSecurityToken(getString(R.string.fyber_securitykey))
                 .start();
         Logger.debugOutput(TAG, "Initialising SDK");
         Logger.debugOutput(TAG, "User ID is: " + settings.getUserId());
+
+        bannerAdView = new BannerAdView(MainActivity.this)
+                .withNetworkSize(AdMobNetworkBannerSizes.LARGE_BANNER)
+                .withListener(new BannerAdListener())
+                .loadOnAttach();
 
         main.button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,32 +95,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void createAndShowBanner(ViewGroup bannerPlacement) {
-        BannerAdView bannerAdView = new BannerAdView(MainActivity.this)
-                .withNetworkSize(AdMobNetworkBannerSizes.LARGE_BANNER)
-                .withListener(new BannerAdListener())
-                .loadOnAttach();
+        bannerPlacement.removeAllViews();
         bannerPlacement.addView(bannerAdView);
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuItem mi = menu.add("Debug");
-        mi.setShowAsAction(MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if(debugView.getVisibility()==View.VISIBLE) {
-            debugView.bringToFront();
-            debugView.setVisibility(View.INVISIBLE);
-            ViewCompat.setTranslationZ(debugView, 10);
-        } else {
-            debugView.bringToFront();
-            debugView.setVisibility(View.VISIBLE);
-            ViewCompat.setTranslationZ(debugView, 10);
+    protected void onDestroy() {
+        super.onDestroy();
+        if(bannerAdView!=null) {
+            Logger.debugOutput(TAG, "Calling destory() on banner ad.");
+            bannerAdView.destroy();
         }
-        return super.onOptionsItemSelected(item);
     }
 
     private class BannerAdListener implements com.fyber.ads.banners.BannerAdListener {
