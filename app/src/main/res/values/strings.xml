@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Stupid App</string>
-    <string name="fyber_appid">45249</string>
-    <string name="fyber_securitykey">6b88263f1af12fa8b0b78f0607f2675d</string>
+    <string name="fyber_appid">23228</string>
+    <string name="fyber_securitykey">token</string>
     <string name="offer_wall_button">offer wall</string>
     <string name="virtual_currency_button">virtual currency</string>
     <string name="interstitial_button">interstitial</string>

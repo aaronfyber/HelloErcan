@@ -1,7 +1,6 @@
 package com.newfivefour.fyberintegration;
 
 import android.app.Activity;
-import android.app.Application;
 import android.os.Bundle;
 import android.support.multidex.MultiDexApplication;
 
